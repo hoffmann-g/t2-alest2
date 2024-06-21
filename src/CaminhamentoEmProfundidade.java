@@ -55,6 +55,5 @@ public class CaminhamentoEmProfundidade{
                 System.out.print(p+"; ");
             System.out.println();
         }   
-
     }
 }

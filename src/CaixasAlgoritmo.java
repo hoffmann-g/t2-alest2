@@ -14,7 +14,7 @@ public class CaixasAlgoritmo {
     public static void main(String[] args) {
 
         // String currDir = Paths.get("").toAbsolutePath().toString();
-        String nameComplete = "E:\\vs-workspace\\vs-workspace-java\\BasicGraphs - Copy\\boxes10k.txt";
+        String nameComplete = "C:\\Users\\endrew.santos\\Downloads\\caixastuff\\teste1000.txt";
         Path path = Paths.get(nameComplete);
         Map<String, Caixa> vertices = new HashMap<>();
         Map<String, Integer> map = new HashMap<>();
@@ -47,7 +47,7 @@ public class CaixasAlgoritmo {
                             int compare = cx1.compareTo(cx2);
                             if(compare < 0){ //if caixa1 < caixa2 then caixa 1 cabe dentro de caixa2
                                 g.addEdge(map.get(linha), map.get(key));
-                                System.out.println(" "+linha + "->" + key);
+                                //System.out.println(" "+linha + "->" + key);
                             }
                         }catch(NullPointerException npe){
                             System.out.println(linha + " não encontrado");
@@ -57,9 +57,12 @@ public class CaixasAlgoritmo {
             }
             sc.close();
 
-            //CaminhamentoEmLargura dfs = new CaminhamentoEmLargura(g, autor1);
-            //boolean hasPath = dfs.hasPath(autor2);
-            //dfs.main(args);
+            CaminhamentoEmProfundidade dfs = new CaminhamentoEmProfundidade(g, 100);
+            boolean hasPath = dfs.hasPath(100);
+            System.out.println("HasPath to 100? " + hasPath);
+            String[] argumentos = new String[1];
+            argumentos[0] = "C:\\Users\\endrew.santos\\Downloads\\caixastuff\\teste1000.txt";
+            //CaminhamentoEmProfundidade.main(argumentos);
             //System.out.println("O nro de vertices é: " + vertices.size());
         } catch (IOException x) {
             System.err.format("Erro de E/S: %s%n", x);

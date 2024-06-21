@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CaixasAlgoritmo",
+            "request": "launch",
+            "mainClass": "CaixasAlgoritmo",
+            "projectName": "BasicGraphs"
+        },
+        {
+            "type": "java",
             "name": "Movies",
             "request": "launch",
             "mainClass": "Movies",
