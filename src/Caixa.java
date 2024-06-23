@@ -27,15 +27,26 @@ public class Caixa implements Comparable<Caixa>{
     public String toString(){
         return dimencoesString;
     }
+    /*
+    Sim isso se transformou em uma atrocidade
+     */
     @Override
     public int compareTo(Caixa caixa2) {
-        ArrayList<Integer> caixa2Values = caixa2.getDimencoes();
-        int retorno = -1;
-        for(int i = 0; i < LENGTH; i++){
-            retorno = this.dimencoes.get(i) - caixa2Values.get(i);
-            if(retorno >= 0)return retorno;
-        }
+        ArrayList<Integer> dim_caixa1 = dimencoes;
+        ArrayList<Integer> dim_caixa2 = caixa2.getDimencoes();
 
-        return retorno;
+        if ((dim_caixa1.get(0) > dim_caixa2.get(0)) && 
+            (dim_caixa1.get(1) > dim_caixa2.get(1)) && 
+            (dim_caixa1.get(2) > dim_caixa2.get(2))){
+            return 1;
+            }
+        if ((dim_caixa1.get(0) < dim_caixa2.get(0)) && 
+            (dim_caixa1.get(1) < dim_caixa2.get(1)) &&
+            (dim_caixa1.get(2) < dim_caixa2.get(2))){
+            return -1;
+        } else {
+            return 0;
+        }
+        
     }
 }

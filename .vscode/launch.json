@@ -6,44 +6,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CaixasAlgoritmo",
+            "name": "AdjacencyListMapping",
             "request": "launch",
-            "mainClass": "CaixasAlgoritmo",
-            "projectName": "BasicGraphs"
+            "mainClass": "AdjacencyListMapping",
+            "projectName": "t2-alest2_78228861"
         },
         {
             "type": "java",
-            "name": "Movies",
+            "name": "Box",
             "request": "launch",
-            "mainClass": "Movies",
-            "projectName": "BasicGraphs"
-        },
-        {
-            "type": "java",
-            "name": "Debug Graph with Arguments Prompt",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "Graph",
-            "args": "${command:SpecifyProgramArgs}"
-        },
-        {
-            "type": "java",
-            "name": "Debug Digraph with Arguments Prompt",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "console": "internalConsole",
-            "stopOnEntry": false,
-            "mainClass": "Digraph",
-            "args": "${command:SpecifyProgramArgs}"
-        },
-        {
-            "type": "java",
-            "name": "Debug (Attach)",
-            "request": "attach",
-            "hostName": "localhost",
-            "port": 0
+            "mainClass": "Box",
+            "projectName": "t2-alest2_78228861"
         }
     ]
 }
