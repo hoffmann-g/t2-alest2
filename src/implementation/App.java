@@ -14,22 +14,17 @@ public class App {
 
     public static void main(String[] args) {
 
-        String path = "casos/caso01000.txt";
+        String path = "casos/caso10000.txt";
 
         List<Box> catalog = getCatalog(path);
 
-        System.out.println("# starting to sort catalog");
-        System.out.println("# catalog sorted");
-
-        System.out.println("# initializing graph");
         BoxDigraph graph = new BoxDigraph(catalog, catalog.size());
-        System.out.println("# graph initialized");
-
-        // writeToDot(graph.toDot());
-        // System.out.println("\n# dotfile exported");
 
         System.out.println("# calculating longest path");
         System.out.println("\n# longest path size: " + graph.getLongestPathSize());
+
+        // writeToDot(graph.toDot());
+        // System.out.println("\n# dotfile exported");
 
         //runPythonScript("dotrender.py");
 
@@ -42,7 +37,7 @@ public class App {
             List<Box> catalogo = new ArrayList<>();
 
             String line = bufferedReader.readLine();
-            System.out.println("# reading .txt lines");
+            
             while (line != null) {
                 catalogo.add(new Box(line));
 
@@ -50,12 +45,10 @@ public class App {
             }
 
             bufferedReader.close();
-            
-            System.out.println("# .txt read");
+
             return catalogo;
 
         } catch (Exception e) {
-            System.out.println("could not read specified path");
             return null;
         }
     }

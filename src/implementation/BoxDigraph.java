@@ -51,7 +51,7 @@ public class BoxDigraph {
 				}	
 			}
 			clearConsole();
-			System.out.println("# added all possible adjacencies to " + (i + 1) + "º vertex");
+			System.out.println("# adding all possible adjacencies to vertices (" + (i + 1) + "|" + V + ")");
 		}
 	}
 
