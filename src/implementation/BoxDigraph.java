@@ -1,8 +1,12 @@
 package implementation;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Stack;
 
 public class BoxDigraph {
 	private static final String NEWLINE = System.getProperty("line.separator");
@@ -30,11 +34,11 @@ public class BoxDigraph {
 
 		for(Box b1 : catalog){
 			for(Box b2 : catalog){
-				if(validateBox(b1, b2)){
-					addEdge(b1, b2);
+				if(this.validateBox(b1, b2)){
+					this.addEdge(b1, b2);
 					E++;
 				} else if (b1.equals(b2)){
-					addVertex(b1);
+					this.addVertex(b1);
 				}
 			}
 		}
@@ -96,7 +100,7 @@ public class BoxDigraph {
 	}
 
 	public void addEdge(Box b1, Box b2) {
-		if(validateBox(b1, b2)){
+		if(this.validateBox(b1, b2)){
 			for (LinkedList<Box> ll : adj){
 				if (ll.getFirst().equals(b1)){
 					ll.add(b2);
@@ -141,6 +145,86 @@ public class BoxDigraph {
 		}
 		return count;
 	}
+
+	public void dfs(Box box, HashSet<Box> visited, Stack<Box> orderedGraph){
+		visited.add(box);
+
+		for (Box b : this.getAdjacencies(box)){
+			if (!visited.contains(b)){
+				dfs(b, visited, orderedGraph);
+			}
+		}
+		orderedGraph.push(box);
+	}
+
+	public Stack<Box> topologicalSearch(Box box){
+
+		// tracks if a node was visited, or not
+		HashSet<Box> visited = new HashSet<>();
+		// ordered-graph
+		Stack<Box> orderedGraph = new Stack<>();
+
+		for(LinkedList<Box> ll: adj){
+			Box b = ll.getFirst();
+			if (!visited.contains(b)){
+				dfs(b, visited, orderedGraph);
+			}
+		}
+
+		return orderedGraph;
+	}
+
+	public HashMap<Box, Integer> getLongestPathsFrom(Box box) {
+		// perform topological sorting
+		Stack<Box> orderedGraph = topologicalSearch(box);
+	
+		// initialize distances map with -infinite for all vertices
+		HashMap<Box, Integer> distances = new HashMap<>();
+		for (LinkedList<Box> ll : adj) {
+			distances.put(ll.getFirst(), Integer.MIN_VALUE);
+		}
+		distances.put(box, 0); // Starting vertex has distance 0
+	
+		// process vertices in topological order
+		while (!orderedGraph.isEmpty()) {
+			Box b = orderedGraph.pop();
+
+			int currentDistance = distances.get(b);
+	
+			// if the current distance is reachable
+			if (currentDistance != Integer.MIN_VALUE) {
+				// update distances for adjacent vertices
+				for (Box adjBox : getAdjacencies(b)) {
+					int newDistance = currentDistance + 1; // increase distance by 1
+					if (distances.get(adjBox) < newDistance) {
+						distances.put(adjBox, newDistance);
+
+					}
+				}
+			}
+		}
+
+		return distances;
+	}
+
+	public int getLongestPathSize() {
+
+		HashMap<Box, Integer> longestPaths = new HashMap<>();
+		int maxValue = Integer.MIN_VALUE;
+
+		for (LinkedList<Box> ll : adj){
+			longestPaths.putAll(getLongestPathsFrom(ll.getFirst()));
+
+			for (Map.Entry<Box, Integer> entry : longestPaths.entrySet()) {
+				if (entry.getValue() > maxValue) {
+					maxValue = entry.getValue();
+				}
+			}
+		}
+
+		return maxValue;		
+	}
+
 
 	/* 
 	public Digraph reverse() {
