@@ -190,9 +190,14 @@ public class BoxDigraph {
 			Box b = orderedGraph.pop();
 
 			int currentDistance = distances.get(b);
-	
+
 			// if the current distance is reachable
 			if (currentDistance != Integer.MIN_VALUE) {
+
+				//System.out.println("current box: " + b);
+				//System.out.println("currentDistance: " + currentDistance);
+				//System.out.println("distances: " + distances);
+
 				// update distances for adjacent vertices
 				for (Box adjBox : getAdjacencies(b)) {
 					int newDistance = currentDistance + 1; // increase distance by 1
