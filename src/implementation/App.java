@@ -29,7 +29,7 @@ public class App {
         // System.out.println("\n# dotfile exported");
 
         System.out.println("# calculating longest path");
-        System.out.println("\nLongest path size: " + graph.getLongestPathSize());
+        System.out.println("\n# longest path size: " + graph.getLongestPathSize());
 
         //runPythonScript("dotrender.py");
 

@@ -50,24 +50,21 @@ public class BoxDigraph {
 					this.updateIndegreeMemo(possibleEdge);
 				}	
 			}
+			clearConsole();
 			System.out.println("# added all possible adjacencies to " + (i + 1) + "º vertex");
 		}
 	}
 
-	public void updateIndegreeMemo(Box box){
+	private void updateIndegreeMemo(Box box){
 		indegreeMemo.putIfAbsent(box, true);
 	}
 
-	public int V() {
+	public int getV() {
 		return V;
 	}
 
-	public int E() {
+	public int getE() {
 		return E;
-	}
-
-	public List<LinkedList<Box>> getAdj() {
-		return adj;
 	}
 
 	private boolean validateBoxes(Box box1, Box box2) {
@@ -88,18 +85,20 @@ public class BoxDigraph {
 	}
 
 	public void addEdge(Box b1, Box b2) {
-		for (LinkedList<Box> ll : adj){
-			if (ll.getFirst().equals(b1)){
-				ll.add(b2);
-				return;
+		if (validateBoxes(b1, b2)){
+			for (LinkedList<Box> ll : adj){
+				if (ll.getFirst().equals(b1)){
+					ll.add(b2);
+					return;
+				}
 			}
-		}
-
-		LinkedList<Box> newAdj = new LinkedList<Box>();
-		newAdj.add(b1);
-		newAdj.add(b2);
-
-		adj.add(newAdj);		
+	
+			LinkedList<Box> newAdj = new LinkedList<Box>();
+			newAdj.add(b1);
+			newAdj.add(b2);
+	
+			adj.add(newAdj);
+		}		
 	}
 
 	public LinkedList<Box> getAdjacencies(Box box) {
@@ -112,7 +111,7 @@ public class BoxDigraph {
 		throw new NoSuchElementException("box not found");
 	}
 
-	public void dfs(Box box, HashSet<Box> visited, Stack<Box> orderedGraph){
+	private void dfs(Box box, HashSet<Box> visited, Stack<Box> orderedGraph){
 		visited.add(box);
 
 		for (Box b : this.getAdjacencies(box)){
@@ -189,7 +188,7 @@ public class BoxDigraph {
 				Integer maxValueFound = getMaxValue(maxPaths);
 
 				if (maxPath < maxValueFound) {
-					System.out.println("bigger path found = " + maxPath);
+					//System.out.println("bigger path found = " + maxValueFound);
 					maxPath = maxValueFound;
 				}
 			}
@@ -217,5 +216,10 @@ public class BoxDigraph {
 		s.append("}");
 		return s.toString();
 	}
+
+	private static void clearConsole() {  
+		System.out.print("\033[H\033[2J");  
+		System.out.flush();  
+	} 
 
 }
