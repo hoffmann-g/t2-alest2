@@ -112,26 +112,6 @@ public class BoxDigraph {
 		throw new NoSuchElementException("box not found");
 	}
 
-	public int outdegree(Box box) {
-		for (LinkedList<Box> ll : adj){
-			if (ll.getFirst().equals(box)){
-				return ll.size() - 1;
-			}
-		}
-
-		throw new NoSuchElementException("box not found");
-	}
-
-	public int indegree(Box box) {
-		int count = 0;
-		for (LinkedList<Box> ll : adj){
-			if (ll.contains(box)){
-				count++;
-			}
-		}
-		return count;
-	}
-
 	public void dfs(Box box, HashSet<Box> visited, Stack<Box> orderedGraph){
 		visited.add(box);
 
@@ -221,33 +201,6 @@ public class BoxDigraph {
 	private Integer getMaxValue(HashMap<Box, Integer> map) {
 		return map.values().stream().max(Integer::compareTo).orElse(0);
 	}
-
-	/* 
-	public Digraph reverse() {
-		Digraph reverse = new Digraph(V);
-		for (int v = 0; v < V; v++) {
-			for (int w : adj(v)) {
-				reverse.addEdge(w, v);
-			}
-		}
-		return reverse;
-	}
-	*/
-
-	/* 
-	public String toString() {
-		StringBuilder s = new StringBuilder();
-		s.append(V + " vertices, " + E + " edges " + NEWLINE);
-		for (int v = 0; v < V; v++) {
-			s.append(String.format("%d: ", v));
-			for (int w : adj[v]) {
-				s.append(String.format("%d ", w));
-			}
-			s.append(NEWLINE);
-		}
-		return s.toString();
-	}
-	*/
 
 	public String toDot() {
 		StringBuilder s = new StringBuilder();
