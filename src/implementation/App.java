@@ -2,63 +2,47 @@ package implementation;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import org.omg.CORBA.portable.InputStream;
 
 public class App {
 
     public static void main(String[] args) {
 
-        String path = "teste_slide.txt";
+        String path = "casos/caso01000.txt";
 
         List<Box> catalog = getCatalog(path);
 
+        System.out.println("# starting to sort catalog");
+        System.out.println("# catalog sorted");
+
+        System.out.println("# initializing graph");
         BoxDigraph graph = new BoxDigraph(catalog, catalog.size());
+        System.out.println("# graph initialized");
 
-        HashMap<Box, Integer> distances = graph.getLongestPathsFrom(new Box("680 579 148"));
+        // writeToDot(graph.toDot());
+        // System.out.println("\n# dotfile exported");
 
-        writeToDot(graph.toDot());
-        System.out.println("\n# dotfile exported");
-
-        System.out.println("\n// ADJ LIST");
-        for (LinkedList<Box> ll : graph.getAdj()) {
-            System.out.println(ll);
-        }
-
-        System.out.println("\nVertices: " + graph.V() + ", Edges: " + graph.E());
-
-        for (Map.Entry<Box, Integer> entry : distances.entrySet()) {
-            Box key = entry.getKey();
-            Integer value = entry.getValue();
-
-            if (value == Integer.MIN_VALUE) {
-                System.out.println(key.toString() + " = not reachable");
-            } else {
-                System.out.println(key.toString() + " = " + value);
-            }
-        }
+        System.out.println("# calculating longest path");
         System.out.println("\nLongest path size: " + graph.getLongestPathSize());
 
-        runPythonScript("dotrender.py");
+        //runPythonScript("dotrender.py");
 
     }
 
     public static List<Box> getCatalog(String path) {
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.UTF_8));
 
             List<Box> catalogo = new ArrayList<>();
 
             String line = bufferedReader.readLine();
+            System.out.println("# reading .txt lines");
             while (line != null) {
                 catalogo.add(new Box(line));
 
@@ -66,6 +50,8 @@ public class App {
             }
 
             bufferedReader.close();
+            
+            System.out.println("# .txt read");
             return catalogo;
 
         } catch (Exception e) {

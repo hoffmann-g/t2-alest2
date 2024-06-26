@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
@@ -14,6 +13,7 @@ public class BoxDigraph {
 	private final int V; // number of vertices in this digraph
 	private int E; // number of edges in this digraph
 	private List<LinkedList<Box>> adj; // adj[v] = adjacency list for vertex v
+	private HashMap<Box, Boolean> indegreeMemo;
 
 	public BoxDigraph(int V) {
 		if (V < 0)
@@ -22,6 +22,7 @@ public class BoxDigraph {
 		this.V = V;
 		this.E = 0;
 		adj = new ArrayList<LinkedList<Box>>();
+		indegreeMemo = new HashMap<>();
 	}
 
 	public BoxDigraph(Iterable<Box> catalog, int V) {
@@ -31,44 +32,31 @@ public class BoxDigraph {
 		this.V = V;
 		this.E = 0;
 		adj = new ArrayList<LinkedList<Box>>();
+		indegreeMemo = new HashMap<>();
 
-		for(Box b1 : catalog){
-			for(Box b2 : catalog){
-				if(this.validateBox(b1, b2)){
-					this.addEdge(b1, b2);
-					E++;
-				} else if (b1.equals(b2)){
-					this.addVertex(b1);
-				}
+		// insert vertices
+		for(Box box : catalog){
+			addVertex(box);
+		}
+
+		System.out.println("# vertices added to graph");
+
+		// make vertices adjecent to others by adding edges
+		for(int i = 0; i < adj.size(); i++){
+			Box vertice = adj.get(i).getFirst();
+			for (Box possibleEdge : catalog){
+				if (validateBoxes(vertice, possibleEdge)){
+					this.addEdge(vertice, possibleEdge);
+					this.updateIndegreeMemo(possibleEdge);
+				}	
 			}
+			System.out.println("# added all possible adjacencies to " + (i + 1) + "º vertex");
 		}
 	}
 
-	/* 
-	@SuppressWarnings("unchecked")
-	public GraphDigraph(In in) {
-		try {
-			this.V = in.readInt();
-			if (V < 0)
-				throw new IllegalArgumentException("number of vertices in a Digraph must be nonnegative");
-			indegree = new int[V];
-			adj = (HashSet<Box>[]) new HashSet[V];
-			for (int v = 0; v < V; v++) {
-				adj[v] = new HashSet<Box>();
-			}
-			int E = in.readInt();
-			if (E < 0)
-				throw new IllegalArgumentException("number of edges in a Digraph must be nonnegative");
-			for (int i = 0; i < E; i++) {
-				int v = in.readInt();
-				int w = in.readInt();
-				addEdge(v, w);
-			}
-		} catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("invalid input format in Digraph constructor", e);
-		}
+	public void updateIndegreeMemo(Box box){
+		indegreeMemo.putIfAbsent(box, true);
 	}
-	*/
 
 	public int V() {
 		return V;
@@ -82,7 +70,7 @@ public class BoxDigraph {
 		return adj;
 	}
 
-	private boolean validateBox(Box box1, Box box2) {
+	private boolean validateBoxes(Box box1, Box box2) {
 		return (box1.compareTo(box2) < 0);
 	}
 
@@ -100,22 +88,18 @@ public class BoxDigraph {
 	}
 
 	public void addEdge(Box b1, Box b2) {
-		if(this.validateBox(b1, b2)){
-			for (LinkedList<Box> ll : adj){
-				if (ll.getFirst().equals(b1)){
-					ll.add(b2);
-					return;
-				}
+		for (LinkedList<Box> ll : adj){
+			if (ll.getFirst().equals(b1)){
+				ll.add(b2);
+				return;
 			}
-	
-			LinkedList<Box> newAdj = new LinkedList<Box>();
-			newAdj.add(b1);
-			newAdj.add(b2);
-	
-			adj.add(newAdj);
 		}
 
-		// throw new IllegalArgumentException("cannot add an edge from a bigger box to a smaller one");		
+		LinkedList<Box> newAdj = new LinkedList<Box>();
+		newAdj.add(b1);
+		newAdj.add(b2);
+
+		adj.add(newAdj);		
 	}
 
 	public LinkedList<Box> getAdjacencies(Box box) {
@@ -124,6 +108,7 @@ public class BoxDigraph {
 				return ll;
 			}
 		}
+
 		throw new NoSuchElementException("box not found");
 	}
 
@@ -133,6 +118,7 @@ public class BoxDigraph {
 				return ll.size() - 1;
 			}
 		}
+
 		throw new NoSuchElementException("box not found");
 	}
 
@@ -154,11 +140,11 @@ public class BoxDigraph {
 				dfs(b, visited, orderedGraph);
 			}
 		}
+
 		orderedGraph.push(box);
 	}
 
 	public Stack<Box> topologicalSearch(Box box){
-
 		// tracks if a node was visited, or not
 		HashSet<Box> visited = new HashSet<>();
 		// ordered-graph
@@ -170,7 +156,6 @@ public class BoxDigraph {
 				dfs(b, visited, orderedGraph);
 			}
 		}
-
 		return orderedGraph;
 	}
 
@@ -190,7 +175,6 @@ public class BoxDigraph {
 			Box b = orderedGraph.pop();
 
 			int currentDistance = distances.get(b);
-
 			// if the current distance is reachable
 			if (currentDistance != Integer.MIN_VALUE) {
 
@@ -212,24 +196,31 @@ public class BoxDigraph {
 		return distances;
 	}
 
-	public int getLongestPathSize() {
+	public Integer getLongestPathSize() {
+		HashSet<Box> visited = new HashSet<>();
+		Integer maxPath = 0;
+		
+		for(LinkedList<Box> ll : adj){
+			Box b = ll.getFirst();
 
-		HashMap<Box, Integer> longestPaths = new HashMap<>();
-		int maxValue = Integer.MIN_VALUE;
+			if (!indegreeMemo.containsKey(b)) {
+				HashMap<Box, Integer> maxPaths = getLongestPathsFrom(b);
+				visited.addAll(maxPaths.keySet());
+				Integer maxValueFound = getMaxValue(maxPaths);
 
-		for (LinkedList<Box> ll : adj){
-			longestPaths.putAll(getLongestPathsFrom(ll.getFirst()));
-
-			for (Map.Entry<Box, Integer> entry : longestPaths.entrySet()) {
-				if (entry.getValue() > maxValue) {
-					maxValue = entry.getValue();
+				if (maxPath < maxValueFound) {
+					System.out.println("bigger path found = " + maxPath);
+					maxPath = maxValueFound;
 				}
 			}
 		}
-
-		return maxValue;		
+		
+		return maxPath;
 	}
 
+	private Integer getMaxValue(HashMap<Box, Integer> map) {
+		return map.values().stream().max(Integer::compareTo).orElse(0);
+	}
 
 	/* 
 	public Digraph reverse() {

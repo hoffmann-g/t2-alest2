@@ -9,6 +9,13 @@
             "name": "App",
             "request": "launch",
             "mainClass": "implementation.App",
+            "projectName": "t2-alest2_6d4eb951"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "implementation.App",
             "projectName": "t2-alest2_78228861"
         },
         {

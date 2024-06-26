@@ -49,6 +49,7 @@ public class Box implements Comparable<Box>{
         }
         
     }
+    
     @Override
     public int hashCode() {
         final int prime = 31;
