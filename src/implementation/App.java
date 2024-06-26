@@ -18,10 +18,12 @@ public class App {
 
         List<Box> catalog = getCatalog(path);
 
-        BoxDigraph graph = new BoxDigraph(catalog, catalog.size());
+        BoxDigraph graph = new BoxDigraph(catalog);
 
         System.out.println("# calculating longest path");
         System.out.println("\n# longest path size: " + graph.getLongestPathSize());
+
+        System.out.println("vertices: " + graph.getV() + " edges: " + graph.getE());
 
         // writeToDot(graph.toDot());
         // System.out.println("\n# dotfile exported");
@@ -37,7 +39,7 @@ public class App {
             List<Box> catalogo = new ArrayList<>();
 
             String line = bufferedReader.readLine();
-            
+
             while (line != null) {
                 catalogo.add(new Box(line));
 

@@ -10,29 +10,29 @@ import java.util.Stack;
 public class BoxDigraph {
 	private static final String NEWLINE = System.getProperty("line.separator");
 
-	private final int V; // number of vertices in this digraph
+	private int V; // number of vertices in this digraph
 	private int E; // number of edges in this digraph
 	private List<LinkedList<Box>> adj; // adj[v] = adjacency list for vertex v
 	private HashMap<Box, Boolean> indegreeMemo;
 
-	public BoxDigraph(int V) {
+	public BoxDigraph() {
 		if (V < 0)
 			throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
 
-		this.V = V;
+		this.V = 0;
 		this.E = 0;
-		adj = new ArrayList<LinkedList<Box>>();
-		indegreeMemo = new HashMap<>();
+		this.adj = new ArrayList<LinkedList<Box>>();
+		this.indegreeMemo = new HashMap<>();
 	}
 
-	public BoxDigraph(Iterable<Box> catalog, int V) {
+	public BoxDigraph(Iterable<Box> catalog) {
 		if (V < 0)
 			throw new IllegalArgumentException("Number of vertices in a Digraph must be nonnegative");
 
-		this.V = V;
+		this.V = 0;
 		this.E = 0;
-		adj = new ArrayList<LinkedList<Box>>();
-		indegreeMemo = new HashMap<>();
+		this.adj = new ArrayList<LinkedList<Box>>();
+		this.indegreeMemo = new HashMap<>();
 
 		// insert vertices
 		for(Box box : catalog){
@@ -46,7 +46,7 @@ public class BoxDigraph {
 			Box vertice = adj.get(i).getFirst();
 			for (Box possibleEdge : catalog){
 				if (validateBoxes(vertice, possibleEdge)){
-					this.addEdge(vertice, possibleEdge);
+					this.addEdge(i, vertice, possibleEdge);
 					this.updateIndegreeMemo(possibleEdge);
 				}	
 			}
@@ -82,6 +82,7 @@ public class BoxDigraph {
 		newAdj.add(b1);
 
 		adj.add(newAdj);
+		this.V++;
 	}
 
 	public void addEdge(Box b1, Box b2) {
@@ -89,6 +90,7 @@ public class BoxDigraph {
 			for (LinkedList<Box> ll : adj){
 				if (ll.getFirst().equals(b1)){
 					ll.add(b2);
+					this.E++;
 					return;
 				}
 			}
@@ -98,6 +100,14 @@ public class BoxDigraph {
 			newAdj.add(b2);
 	
 			adj.add(newAdj);
+		}		
+	}
+
+	public void addEdge(int i, Box b1, Box b2) {
+		if (validateBoxes(b1, b2)){
+			if (adj.get(i).getFirst() == b1)
+				adj.get(i).add(b2);
+				this.E++;
 		}		
 	}
 
@@ -176,7 +186,6 @@ public class BoxDigraph {
 	}
 
 	public Integer getLongestPathSize() {
-		HashSet<Box> visited = new HashSet<>();
 		Integer maxPath = 0;
 		
 		for(LinkedList<Box> ll : adj){
@@ -184,7 +193,6 @@ public class BoxDigraph {
 
 			if (!indegreeMemo.containsKey(b)) {
 				HashMap<Box, Integer> maxPaths = getLongestPathsFrom(b);
-				visited.addAll(maxPaths.keySet());
 				Integer maxValueFound = getMaxValue(maxPaths);
 
 				if (maxPath < maxValueFound) {
