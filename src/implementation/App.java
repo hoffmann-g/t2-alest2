@@ -20,10 +20,10 @@ public class App {
 
         BoxDigraph graph = new BoxDigraph(catalog);
 
-        System.out.println("# calculating longest path");
-        System.out.println("\n# longest path size: " + graph.getLongestPathSize());
+        // System.out.println("# calculating longest path");
+        System.out.println("\n# Longest path size found: " + graph.getLongestPathSize());
 
-        System.out.println("vertices: " + graph.getV() + " edges: " + graph.getE());
+        System.out.println("(Graph is composed by " + graph.getV() + " vertices and " + graph.getE() + " edges.)");
 
         // writeToDot(graph.toDot());
         // System.out.println("\n# dotfile exported");

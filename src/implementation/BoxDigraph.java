@@ -13,7 +13,7 @@ public class BoxDigraph {
 	private int V; // number of vertices in this digraph
 	private int E; // number of edges in this digraph
 	private List<LinkedList<Box>> adj; // adj[v] = adjacency list for vertex v
-	private HashMap<Box, Boolean> indegreeMemo;
+	private HashSet<Box> indegreeMemo;
 
 	public BoxDigraph() {
 		if (V < 0)
@@ -22,7 +22,7 @@ public class BoxDigraph {
 		this.V = 0;
 		this.E = 0;
 		this.adj = new ArrayList<LinkedList<Box>>();
-		this.indegreeMemo = new HashMap<>();
+		this.indegreeMemo = new HashSet<>();
 	}
 
 	public BoxDigraph(Iterable<Box> catalog) {
@@ -32,14 +32,12 @@ public class BoxDigraph {
 		this.V = 0;
 		this.E = 0;
 		this.adj = new ArrayList<LinkedList<Box>>();
-		this.indegreeMemo = new HashMap<>();
+		this.indegreeMemo = new HashSet<>();
 
 		// insert vertices
 		for(Box box : catalog){
 			addVertex(box);
 		}
-
-		System.out.println("# vertices added to graph");
 
 		// make vertices adjecent to others by adding edges
 		for(int i = 0; i < adj.size(); i++){
@@ -47,16 +45,20 @@ public class BoxDigraph {
 			for (Box possibleEdge : catalog){
 				if (validateBoxes(vertice, possibleEdge)){
 					this.addEdge(i, vertice, possibleEdge);
+					// since the possible vertex is going to have another vertex directed to it,
+					// we keep track of it in a hashset
 					this.updateIndegreeMemo(possibleEdge);
 				}	
 			}
+			// console log purpose ---------------------------------------------------------------------------
 			clearConsole();
-			System.out.println("# adding all possible adjacencies to vertices (" + (i + 1) + "|" + V + ")");
+			System.out.println("# Adding all possible adjacencies to vertices (" + (i + 1) + "|" + V + ")");
+			// -----------------------------------------------------------------------------------------------
 		}
 	}
 
 	private void updateIndegreeMemo(Box box){
-		indegreeMemo.putIfAbsent(box, true);
+		indegreeMemo.add(box);
 	}
 
 	public int getV() {
@@ -187,18 +189,40 @@ public class BoxDigraph {
 
 	public Integer getLongestPathSize() {
 		Integer maxPath = 0;
-		
+
+		// console log purpose -----------------
+		int index = 1;
+		int total = (V - indegreeMemo.size());
+		//  ------------------------------------
+
 		for(LinkedList<Box> ll : adj){
 			Box b = ll.getFirst();
-
-			if (!indegreeMemo.containsKey(b)) {
+			
+			if (!indegreeMemo.contains(b)) {
 				HashMap<Box, Integer> maxPaths = getLongestPathsFrom(b);
 				Integer maxValueFound = getMaxValue(maxPaths);
 
+				// console log purpose
+				 index++;
+				// -------------------
+
 				if (maxPath < maxValueFound) {
-					//System.out.println("bigger path found = " + maxValueFound);
 					maxPath = maxValueFound;
+					
+					// console log purpose ----------------------------------------------------------------------
+					clearConsole();
+					System.out.println("# Adding all possible adjacencies to vertices (" + V + "|" + V + ")");
+					System.out.println("# Searching for longest paths (" + index + "|" + total + ")");
+					//  -----------------------------------------------------------------------------------------
 				}
+
+				// console log purpose --------------------------------------------------------------------------
+				if (index == (V - indegreeMemo.size())){
+					  clearConsole();
+					  System.out.println("# Adding all possible adjacencies to vertices (" + V + "|" + V + ")");
+					  System.out.println("# Searching for longest paths (" + total + "|" + total + ")");
+				}
+				//  ----------------------------------------------------------------------------------------------
 			}
 		}
 		
@@ -225,9 +249,11 @@ public class BoxDigraph {
 		return s.toString();
 	}
 
+	// console log purpose -------------------
 	private static void clearConsole() {  
 		System.out.print("\033[H\033[2J");  
 		System.out.flush();  
 	} 
+	// ---------------------------------------
 
 }
