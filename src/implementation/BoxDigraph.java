@@ -135,7 +135,7 @@ public class BoxDigraph {
 		orderedGraph.push(box);
 	}
 
-	public Stack<Box> topologicalSearch(Box box){
+	public Stack<Box> topologicalSort(Box box){
 		// tracks if a node was visited, or not
 		HashSet<Box> visited = new HashSet<>();
 		// ordered-graph
@@ -152,7 +152,7 @@ public class BoxDigraph {
 
 	public HashMap<Box, Integer> getLongestPathsFrom(Box box) {
 		// perform topological sorting
-		Stack<Box> orderedGraph = topologicalSearch(box);
+		Stack<Box> orderedGraph = topologicalSort(box);
 	
 		// initialize distances map with -infinite for all vertices
 		HashMap<Box, Integer> distances = new HashMap<>();
