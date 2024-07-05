@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "implementation.App",
+            "projectName": "t2-alest2_6d4eb951"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "implementation.App",
+            "projectName": "t2-alest2_78228861"
+        },
+        {
+            "type": "java",
+            "name": "AdjacencyListMapping",
+            "request": "launch",
+            "mainClass": "AdjacencyListMapping",
+            "projectName": "t2-alest2_78228861"
+        },
+        {
+            "type": "java",
+            "name": "Box",
+            "request": "launch",
+            "mainClass": "Box",
+            "projectName": "t2-alest2_78228861"
+        }
+    ]
+}
