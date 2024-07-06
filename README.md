@@ -7,7 +7,7 @@ This project involves implementing a directed graph to solve the problem of find
 
 The graph is represented using an adjacency list and consists of boxes characterized by their XYZ dimensions.
 
-# Techinologies used
+# Technologies used
 - Java for the graph
 - Python for generating the box catalogs
 - PyDot for rendering the visual representation
