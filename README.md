@@ -14,7 +14,7 @@ The graph is represented using an adjacency list and consists of boxes character
 
 # Authors
 
-Endrew Soares
-Guilherme Hoffmann
+- Endrew Soares
+- Guilherme Hoffmann
 
 [LinkedIn Profile](https://www.linkedin.com/in/hoffmann-g/)
