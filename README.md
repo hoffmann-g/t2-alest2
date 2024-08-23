@@ -12,8 +12,9 @@ The graph is represented using an adjacency list and consists of boxes character
 - Python for generating the box catalogs
 - PyDot for rendering the visual representation
 
-# Author
+# Authors
 
-Guilherme Hoffmann Batistti dos Santos
+Endrew Soares
+Guilherme Hoffmann
 
 [LinkedIn Profile](https://www.linkedin.com/in/hoffmann-g/)
